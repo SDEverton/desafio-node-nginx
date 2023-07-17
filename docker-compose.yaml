@@ -16,6 +16,7 @@ services:
       - "3000:3000"
     depends_on: 
       - dbnode
+      - nginx
 
   dbnode:
     image: mysql:5.7
