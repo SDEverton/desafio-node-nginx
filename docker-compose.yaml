@@ -4,8 +4,10 @@ services:
 
   app:
     build: 
-      context: node
+      context: ./node
+      dockerfile: Dockerfile
     container_name: app
+    restart: always
     entrypoint: dockerize -wait tcp://dbnode:3306 -timeout 20s docker-entrypoint.sh
     networks: 
       - node-network
@@ -16,7 +18,6 @@ services:
       - "3000:3000"
     depends_on: 
       - dbnode
-      - nginx
 
   dbnode:
     image: mysql:5.7
@@ -43,6 +44,9 @@ services:
       - node-network
     ports: 
       - "8080:80"
+    depends_on: 
+      - dbnode
+      - app
 
 networks: 
   node-network:
