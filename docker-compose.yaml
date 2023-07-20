@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     container_name: app
     restart: always
-    entrypoint: dockerize -wait tcp://dbnode:3306 -timeout 20s docker-entrypoint.sh
+    entrypoint: dockerize -wait tcp://dbnode:3306 -timeout 20s docker-entrypoint.sh sh -c "npm install && node index.js"
     networks: 
       - node-network
     volumes: 
@@ -20,7 +20,9 @@ services:
       - dbnode
 
   dbnode:
-    image: mysql:5.7
+    build: 
+      context: ./db
+      dockerfile: Dockerfile
     command: --innodb-use-native-aio=0
     container_name: dbnode
     restart: always
